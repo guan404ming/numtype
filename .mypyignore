@@ -34,7 +34,7 @@ numpy\.typing\.mypy_plugin
 numpy(\.\w+)+\.__replace__
 
 # workaround for https://github.com/python/mypy/issues/15302#issuecomment-2701979355
-numpy\.testing(\._private\.utils)?\.check_support_sve
+# numpy\.testing(\._private\.utils)?\.check_support_sve
 
 # workaround for stubtest ignoring `if sys.version_info` blocks in `_typeshed` when
 # `python_version`

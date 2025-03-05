@@ -4,7 +4,7 @@
 #     "numtype[numpy]",
 #
 #     # Keep in sync with pyproject.toml
-#     "mypy[faster-cache]>=1.15.0",
+#     "mypy[faster-cache] @ git+https://github.com/hauntsaninja/mypy@stubrelax",
 #
 #     # numpy dev dependencies
 #     "pytest>=8.3.4",

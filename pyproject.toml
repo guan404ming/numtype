@@ -47,7 +47,8 @@ dependencies = []
 [dependency-groups]
 dev = [
     "basedpyright>=1.28.1",
-    "mypy>=1.15.0",
+    # "mypy>=1.15.0",
+    "mypy @ git+https://github.com/hauntsaninja/mypy@stubrelax",
     "pytest>=8.3.4",
     "ruff>=0.9.9",
 ]
