@@ -21,12 +21,15 @@ from numpy._typing import (
     NDArray,
     _ArrayLike,
     _ArrayLikeBool_co,
+    _ArrayLikeComplex_co,
     _ArrayLikeFloat_co,
     _ArrayLikeInt_co,
     _ArrayLikeNumber_co,
     _ArrayLikeObject_co,
+    _ComplexLike_co,
     _DTypeLike,
     _DTypeLikeBool,
+    _DTypeLikeComplex,
     _DTypeLikeFloat,
     _FloatLike_co,
     _NestedSequence,
@@ -412,6 +415,59 @@ class _Call11Float(Protocol):
         dtype: _DTypeLikeFloat | None = None,
         **kwds: Unpack[_Kwargs2],
     ) -> NDArray[np.floating]: ...
+
+@type_check_only
+class _Call11Complex(Protocol):
+    @overload  # (complex) -> complex128
+    def __call__(
+        self,
+        x: complex,
+        /,
+        out: None = None,
+        *,
+        dtype: _DTypeLikeComplex | None = None,
+        **kwds: Unpack[_Kwargs2],
+    ) -> np.complex128: ...
+    @overload  # (scalar) -> complex
+    def __call__(
+        self,
+        x: _ComplexLike_co,
+        /,
+        out: None = None,
+        *,
+        dtype: _DTypeLikeComplex | None = None,
+        **kwds: Unpack[_Kwargs2],
+    ) -> np.complexfloating: ...
+    @overload  # (array-like, out: T) -> T
+    def __call__(
+        self,
+        x: _ArrayLikeComplex_co,
+        /,
+        out: _Out1[_ArrayT],
+        *,
+        dtype: _DTypeLikeComplex | None = None,
+        **kwds: Unpack[_Kwargs2],
+    ) -> _ArrayT: ...
+    @overload  # (NDArray[complex128] | _NestedSequence[complex]) -> NDArray[complex128]
+    def __call__(
+        self,
+        x: NDArray[np.complex128] | _NestedSequence[complex],
+        /,
+        out: _Out1[NDArray[np.complex128]] | None = None,
+        *,
+        dtype: _DTypeLikeComplex | None = None,
+        **kwds: Unpack[_Kwargs2],
+    ) -> NDArray[np.complex128]: ...
+    @overload  # (array) -> Array[complex]
+    def __call__(
+        self,
+        x: NDArray[np.complexfloating] | _NestedSequence[np.complexfloating],
+        /,
+        out: _Out1[NDArray[np.complexfloating]] | None = None,
+        *,
+        dtype: _DTypeLikeComplex | None = None,
+        **kwds: Unpack[_Kwargs2],
+    ) -> NDArray[np.complexfloating]: ...
 
 @type_check_only
 class _Call11Isnat(Protocol):
@@ -1463,14 +1519,14 @@ rad2deg: Final[_ufunc_1_1[_Call11Float]] = ...
 radians: Final[_ufunc_1_1[_Call11Float]] = ...
 
 # {[fc]O} -> $1
-arccos: Final[_ufunc_1_1] = ...
-arccosh: Final[_ufunc_1_1] = ...
-arcsin: Final[_ufunc_1_1] = ...
-arcsinh: Final[_ufunc_1_1] = ...
-arctan: Final[_ufunc_1_1] = ...
-arctanh: Final[_ufunc_1_1] = ...
-cos: Final[_ufunc_1_1] = ...
-cosh: Final[_ufunc_1_1] = ...
+arccos: Final[_ufunc_1_1[_Call11Complex]] = ...
+arccosh: Final[_ufunc_1_1[_Call11Complex]] = ...
+arcsin: Final[_ufunc_1_1[_Call11Complex]] = ...
+arcsinh: Final[_ufunc_1_1[_Call11Complex]] = ...
+arctan: Final[_ufunc_1_1[_Call11Complex]] = ...
+arctanh: Final[_ufunc_1_1[_Call11Complex]] = ...
+cos: Final[_ufunc_1_1[_Call11Complex]] = ...
+cosh: Final[_ufunc_1_1[_Call11Complex]] = ...
 exp: Final[_ufunc_1_1] = ...
 exp2: Final[_ufunc_1_1] = ...
 expm1: Final[_ufunc_1_1] = ...
