@@ -3,9 +3,12 @@ name: deploy docs
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
 
 permissions:
   contents: write
+  pull-requests: write
 
 env:
   UV_FROZEN: 1
@@ -25,5 +28,36 @@ jobs:
         with:
           enable-cache: true
 
-      - name: mkdocs gh-deploy
+      - name: Deploy to GitHub Pages
+        if: github.event_name == 'push'
         run: uv run --only-group=docs mkdocs gh-deploy --force
+
+      - name: Build docs for PR preview
+        if: github.event_name == 'pull_request'
+        run: uv run --only-group=docs mkdocs build
+
+      - name: Deploy PR preview
+        if: github.event_name == 'pull_request'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./site
+          destination_dir: pr-preview/${{ github.event.pull_request.number }}
+          keep_files: true
+
+      - name: Comment on PR with preview URL
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const repo = context.repo;
+            const prNumber = context.issue.number;
+            const previewUrl = `https://${repo.owner}.github.io/${repo.repo}/pr-preview/${prNumber}/`;
+
+            github.rest.issues.createComment({
+              owner: repo.owner,
+              repo: repo.repo,
+              issue_number: prNumber,
+              body: `📚 Documentation preview is ready!\n\n[View Preview](${previewUrl})`
+            });
